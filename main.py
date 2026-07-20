@@ -44,58 +44,51 @@ drink_menu = {
     }
 }
 
-print("\n======= BYTEBEAN MENU =======")
+# Create the cart ONCE
+cart = []
 
-for key, value in drink_menu.items():
-    print(f"{key}. {value['category']}")
+while True:
 
-category = input("\nSelect a category (1-4): ")
+    print("\n======= BYTEBEAN MENU =======")
 
-if category not in drink_menu:
-    print("Invalid category!")
-    exit()
+    for key, value in drink_menu.items():
+        print(f"{key}. {value['category']}")
 
-print(f"\n----- {drink_menu[category]['category']} Menu -----")
+    category = input("\nSelect a category (1-4): ")
 
-for key, value in drink_menu[category]["items"].items():
-    print(f"{key}. {value['name']} - Rs.{value['price']}")
+    if category not in drink_menu:
+        print("Invalid category!")
+        exit()
 
-drink = input("\nSelect your drink: ")
+    print(f"\n----- {drink_menu[category]['category']} Menu -----")
 
-if drink not in drink_menu[category]["items"]:
-    print("Invalid drink!")
-    exit()
+    for key, value in drink_menu[category]["items"].items():
+        print(f"{key}. {value['name']} - Rs.{value['price']}")
 
-num_of_cups = int(input("How many cups would you like to order? "))
+    drink = input("\nSelect your drink: ")
 
-selected_item = drink_menu[category]["items"][drink]
+    if drink not in drink_menu[category]["items"]:
+        print("Invalid drink!")
+        exit()
 
-total_amount = selected_item["price"] * num_of_cups
+    num_of_cups = int(input("How many cups would you like to order? "))
 
-original_total = total_amount
+    selected_item = drink_menu[category]["items"][drink]
 
-discount_per = 0
+    total_amount = selected_item["price"] * num_of_cups
 
-if original_total >= 5000:
-    discount_per = 20
-elif original_total >= 3000:
-    discount_per = 15
-elif original_total >= 1000:
-    discount_per = 10
+    cart.append({
+    "category": drink_menu[category]["category"],
+    "name": selected_item["name"],
+    "price": selected_item["price"],
+    "quantity": num_of_cups,
+    "total": total_amount
+})
 
-discount_amount = (discount_per / 100) * original_total
-final_total = original_total - discount_amount
+    again = input("Would you like to order another drink? (yes/no): ").lower()
 
-print("\n====== RECEIPT ======")
+    if again != "yes":
+        break
 
-print(f"Customer Name      : {customer_name}")
-print(f"Category           : {drink_menu[category]['category']}")
-print(f"Drink              : {selected_item['name']}")
-print(f"Price Per Cup      : Rs.{selected_item['price']}")
-print(f"Quantity           : {num_of_cups}")
-print(f"Subtotal           : Rs.{original_total}")
-print(f"Discount           : {discount_per}%")
-print(f"Discount Amount    : Rs.{discount_amount:.2f}")
-print(f"Final Total        : Rs.{final_total:.2f}")
-
-print("\nThank you for visiting ByteBean ☕")
+for order in cart:
+    print(f"{order['quantity']} x {order['name']} ({order['category']}) - Rs.{order['total']}")
