@@ -1,4 +1,11 @@
+from drink import Drink
 from database import create_table, insert_order, view_orders,search_orders_by_customer,update_order,delete_order
+
+test_drink = Drink("Espresso", 300, "Coffee")
+
+print(test_drink.name)
+print(test_drink.price)
+print(test_drink.category)
 
 drink_menu = {
     "1": {
