@@ -1,52 +1,48 @@
 from drink import Drink
 from database import create_table, insert_order, view_orders,search_orders_by_customer,update_order,delete_order
+from order import Order
 
-test_drink = Drink("Espresso", 300, "Coffee")
 
-print(test_drink.name)
-print(test_drink.price)
-print(test_drink.category)
 
 drink_menu = {
     "1": {
         "category": "Coffee",
         "items": {
-            "1": {"name": "Espresso", "price": 300},
-            "2": {"name": "Cappuccino", "price": 200},
-            "3": {"name": "Latte", "price": 250},
-            "4": {"name": "Americano", "price": 100}
-        }
+    "1": Drink("Espresso", 300, "Coffee"),
+    "2": Drink("Cappuccino", 200, "Coffee"),
+    "3": Drink("Latte", 250, "Coffee"),
+    "4": Drink("Americano", 100, "Coffee")
+}
     },
 
     "2": {
-        "category": "Tea",
-        "items": {
-            "1": {"name": "Green Tea", "price": 300},
-            "2": {"name": "Black Tea", "price": 200},
-            "3": {"name": "Oolong Tea", "price": 250},
-            "4": {"name": "Chamomile Tea", "price": 100}
-        }
-    },
+    "category": "Tea",
+    "items": {
+        "1": Drink("Green Tea", 300, "Tea"),
+        "2": Drink("Black Tea", 200, "Tea"),
+        "3": Drink("Oolong Tea", 250, "Tea"),
+        "4": Drink("Chamomile Tea", 100, "Tea")
+    }
+},
 
     "3": {
-        "category": "Juice",
-        "items": {
-            "1": {"name": "Orange Juice", "price": 300},
-            "2": {"name": "Apple Juice", "price": 200},
-            "3": {"name": "Grape Juice", "price": 250},
-            "4": {"name": "Pineapple Juice", "price": 100}
-        }
-    },
-
-    "4": {
-        "category": "Water",
-        "items": {
-            "1": {"name": "Mineral Water", "price": 300},
-            "2": {"name": "Sparkling Water", "price": 200},
-            "3": {"name": "Spring Water", "price": 250},
-            "4": {"name": "Distilled Water", "price": 100}
-        }
+    "category": "Juice",
+    "items": {
+        "1": Drink("Orange Juice", 300, "Juice"),
+        "2": Drink("Apple Juice", 200, "Juice"),
+        "3": Drink("Grape Juice", 250, "Juice"),
+        "4": Drink("Pineapple Juice", 100, "Juice")
     }
+},
+    "4": {
+    "category": "Water",
+    "items": {
+        "1": Drink("Mineral Water", 300, "Water"),
+        "2": Drink("Sparkling Water", 200, "Water"),
+        "3": Drink("Spring Water", 250, "Water"),
+        "4": Drink("Distilled Water", 100, "Water")
+    }
+}
 }
 
 def show_menu(drink_menu):
@@ -60,7 +56,7 @@ def show_drinks(drink_menu,category):
     print(f"\n----- {drink_menu[category]['category']} Menu -----")
 
     for key, value in drink_menu[category]["items"].items():
-        print(f"{key}. {value['name']} - Rs.{value['price']}")
+      print(f"{key}. {value.name} - Rs.{value.price}")
 
 def print_receipt(customer_name,cart,grand_total, discount_percent, discount, final_amount):
     print("\n====================================")
@@ -159,23 +155,22 @@ def main():
 
         selected_item = drink_menu[category]["items"][drink]
 
-        total_amount = selected_item["price"] * num_of_cups
+
+        total_amount = selected_item.calculate_total(num_of_cups)
 
         cart.append({
-            "category": drink_menu[category]["category"],
-            "name": selected_item["name"],
-            "price": selected_item["price"],
-            "quantity": num_of_cups,
-            "total": total_amount
-        })
+          "category": selected_item.category,
+          "name": selected_item.name,
+          "price": selected_item.price,
+         "quantity": num_of_cups,
+         "total": total_amount
+})
 
         insert_order(
-            customer_name,
-            drink_menu[category]["category"],
-            selected_item["name"],
-            selected_item["price"],
-            num_of_cups,
-            total_amount
+           customer_name,
+           selected_item.category,
+           selected_item.name,
+           selected_item.price,
 )
 
         # Order Again Validation
